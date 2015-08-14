@@ -1,0 +1,4 @@
+  mvn exec:java \
+  -Dexec.mainClass=nlp.NLP \
+  -Dexec.args="--project=${PROJECT} --stagingLocation=${STAGING} --runner=BlockingDataflowPipelineRunner --autoscalingAlgorithm=BASIC --inputFile=$1 --output=$2"
+
