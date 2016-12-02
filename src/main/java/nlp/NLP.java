@@ -76,16 +76,18 @@ public class NLP {
 	p.apply(TextIO.Read.from(options.getInputFile()))
 	    .apply(ParDo.named("ExtractWords").of(new DoFn<String, String>() {
 			private static final long serialVersionUID = 0;
+			// creates a StanfordCoreNLP object, with POS tagging, lemmatization, NER, parsing, and coreference resolution 
+			private Properties props = new Properties();
+			props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref, sentiment");
 			private StanfordCoreNLP tokenizer;
-			
 			@Override
 			    public void startBundle(Context c) {
-			    tokenizer = new StanfordCoreNLP();
+			    tokenizer = new StanfordCoreNLP(props);
   			}
 			@Override
 			    public void processElement(ProcessContext c) throws InterruptedException {
-			    String word = c.element();
-			    Annotation annotation = tokenizer.process(word);
+			    String line = c.element();
+			    Annotation annotation = tokenizer.process(line);
 			    tokenizer.annotate(annotation);
 			    
 			    c.output("DID ONE -- FORMAT OUTPUT HERE");
